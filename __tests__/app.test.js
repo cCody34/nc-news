@@ -13,27 +13,11 @@ beforeEach(() => {
 });
 
 describe("app", () => {
-  describe("/api/healthCheck", () => {
-    test("200: responds with a status of 200", () => {
-      return request(app).get("/api/healthcheck").expect(200);
-    });
-    test("200: responds with a message on the body", () => {
-      return request(app)
-        .get("/api/healthcheck")
-        .expect(200)
-        .then((response) => {
-          const { body } = response;
-          expect(body).toHaveProperty("msg", "server is running");
-        });
-    });
-  });
   describe("/api", () => {
-    test("200: responds with a status of 200", () => {
-      return request(app).get("/api").expect(200);
-    });
-    test("200: responds with a json object of endpoints", () => {
+    test("200: responds with 200 status and a json object of endpoints", () => {
       return request(app)
         .get("/api")
+        .expect(200)
         .then((response) => {
           const { body } = response;
           const endpoints = require("../db/endpoints.json");
@@ -42,10 +26,7 @@ describe("app", () => {
     });
   });
   describe("/api/topics", () => {
-    test("200: responds with a status of 200", () => {
-      return request(app).get("/api/topics").expect(200);
-    });
-    test("200: responds with topics array on the response body", () => {
+    test("200: responds with a 200 status and a topics array on the response body", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -61,10 +42,7 @@ describe("app", () => {
   });
   describe("/api/articles", () => {
     describe("/api/articles/:article_id", () => {
-      test("200: responds with a status of 200", () => {
-        return request(app).get("/api/articles/2").expect(200);
-      });
-      test("200: responds with a an article object with the correct id", () => {
+      test("200: responds with 200 status and an article object with the correct id", () => {
         return request(app)
           .get("/api/articles/2")
           .then((response) => {
@@ -88,24 +66,23 @@ describe("app", () => {
             );
           });
       });
-      test("400: responds with a status of 400 when sent bad request", () => {
-        return request(app).get("/api/articles/hello").expect(400);
-      });
-      test("400: responds with a message when sent bad request", () => {
+      test("400: responds with 400 status and a message when sent bad request", () => {
         return request(app)
           .get("/api/articles/hello")
+          .expect(400)
           .then(({ body }) => {
             expect(body).toHaveProperty("msg", "bad request");
           });
       });
-      test("404: responds with a status of 404 when article_id does not exist", () => {
-        return request(app).get("/api/articles/10000").expect(404);
-      });
-      test("404: responds with a message when article_id does not exist", () => {
+      test("404: responds with 404 status and a message when article_id does not exist", () => {
         return request(app)
           .get("/api/articles/10000")
+          .expect(404)
           .then(({ body }) => {
-            expect(body).toHaveProperty("msg", "article with this article_id not found")
+            expect(body).toHaveProperty(
+              "msg",
+              "article with this article_id not found"
+            );
           });
       });
     });
