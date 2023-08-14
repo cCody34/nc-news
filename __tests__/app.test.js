@@ -69,7 +69,6 @@ describe("app", () => {
           .get("/api/articles/2")
           .then((response) => {
             const { body } = response;
-            console.log(body);
             expect(body).toHaveProperty("author", "icellusedkars");
             expect(body).toHaveProperty("title", "Sony Vaio; or, The Laptop");
             expect(body).toHaveProperty("article_id", 2);
