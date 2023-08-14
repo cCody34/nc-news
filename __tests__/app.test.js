@@ -27,6 +27,20 @@ describe("app", () => {
         });
     });
   });
+  describe("/api", () => {
+    test("200: responds with a status of 200", () => {
+      return request(app).get("/api").expect(200);
+    });
+    test("200: responds with a json object of endpoints", () => {
+      return request(app)
+        .get("/api")
+        .then((response) => {
+          const { body } = response;
+          const endpoints = require("../db/endpoints.json");
+          expect(body).toEqual(endpoints);
+        });
+    });
+  });
   describe("/api/topics", () => {
     test("200: responds with a status of 200", () => {
       return request(app).get("/api/topics").expect(200);
