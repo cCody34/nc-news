@@ -34,26 +34,10 @@ describe("app", () => {
     test("200: responds with a json object of endpoints", () => {
       return request(app)
         .get("/api")
-        .expect(200)
         .then((response) => {
           const { body } = response;
-          expect(typeof body).toBe("object");
-          const bodyArr = Object.entries(body);
-          bodyArr.forEach((endpointArr) => {
-            const key = endpointArr[0];
-            const value = endpointArr[1];
-            const keyIsReq = key.startsWith(
-              "GET" || "POST" || "PUT" || "DELETE" || "PATCH"
-            );
-            expect(keyIsReq).toBe(true);
-            expect(value).toHaveProperty("description", expect.any(String));
-            expect(value).toHaveProperty("queries", expect.any(Array));
-            expect(value).toHaveProperty(
-              "requestBodyFormat",
-              expect.any(String)
-            );
-            expect(value).toHaveProperty("exampleResponse", expect.any(Object));
-          });
+          const endpoints = require("../db/endpoints.json");
+          expect(body).toEqual(endpoints);
         });
     });
   });

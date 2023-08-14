@@ -1,12 +1,8 @@
 const fs = require("fs/promises");
+const endpoints = require("../endpoints.json")
 
 const getEndpoints = (req, res, next) => {
-  fs.readFile(
-    "endpoints.json"
-  ).then((response) => {
-    const JSONres = JSON.parse(response);
-    res.status(200).send(JSONres)
-  });
+  res.status(200).send(endpoints)
 };
 
 module.exports = { getEndpoints };
