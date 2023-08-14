@@ -10,4 +10,8 @@ app.get("/api/healthcheck", healthCheckController);
 
 app.get("/api/topics", getTopics);
 
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: err });
+});
+
 module.exports = app;
