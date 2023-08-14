@@ -88,6 +88,14 @@ describe("app", () => {
             );
           });
       });
+      test("400: responds with a status of 400 when sent bad request", () => {
+        return request(app).get("/api/articles/hello").expect(400);
+      })
+      test("400: responds with a message when sent bad request", () => {
+        return request(app).get("/api/articles/hello").then(({body}) => {
+          expect(body).toHaveProperty("msg", "bad request")
+        });
+      })
     });
   });
 });
