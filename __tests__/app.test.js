@@ -205,6 +205,32 @@ describe("app", () => {
               expect(msg).toBe("not found");
             });
         });
+        test("400: responds with bad request when passed invalid article_id", () => {
+          return request(app)
+            .post("/api/articles/hello/comments")
+            .send({
+              username: "butter_bridge",
+              body: "This is a test comment.",
+            })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("400: responds with bad request when passed incorrect request body", () => {
+          return request(app)
+            .post("/api/articles/3/comments")
+            .send({
+              hello: "butter_bridge",
+              goodbye: "This is a test comment.",
+            })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
       });
     });
   });
