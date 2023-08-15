@@ -20,6 +20,9 @@ exports.readCommentsByArticle = (article_id) => {
 };
 
 exports.insertComment = (article_id, author, body) => {
+  if (typeof author !== "string" || typeof body !== "string"){
+    return Promise.reject({status: 400, msg: "bad request"})
+  }
   return db
     .query(
       `INSERT INTO comments

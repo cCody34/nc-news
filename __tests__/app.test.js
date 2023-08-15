@@ -231,6 +231,19 @@ describe("app", () => {
               expect(msg).toBe("bad request");
             });
         });
+        test("400: responds with bad request when passed incorrect value types in request body", () => {
+          return request(app)
+            .post("/api/articles/3/comments")
+            .send({
+              username: 3,
+              body: {key: "value"},
+            })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
       });
     });
   });
