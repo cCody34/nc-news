@@ -11,8 +11,11 @@ const {
 } = require("./db/error-handlers/error.js");
 const {
   getCommentsByArticle,
+  postComment,
 } = require("./db/controllers/comments-controllers.js");
 const app = express();
+
+app.use(express.json());
 
 app.get("/api", getEndpoints);
 
@@ -24,9 +27,11 @@ app.get("/api/articles/:article_id", getArticleByID);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
+app.post("/api/articles/:article_id/comments", postComment);
+
 app.use((req, res, next) => {
-  res.status(404).send({msg: "not found"})
-})
+  res.status(404).send({ msg: "not found" });
+});
 
 app.use(handle400s);
 
