@@ -110,4 +110,15 @@ describe("app", () => {
       });
     });
   });
+  describe("ALL /notapath", () => {
+    test("404: should respond with a custom 404 message when the path is not found", () => {
+      return request(app)
+        .get("/api/hello")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("not found");
+        });
+    });
+  });
 });

@@ -19,6 +19,10 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleByID);
 
+app.use((req, res, next) => {
+  res.status(404).send({msg: "not found"})
+})
+
 app.use(handle400s);
 
 app.use(handleCustomErrors);
