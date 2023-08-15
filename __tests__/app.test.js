@@ -133,6 +133,55 @@ describe("app", () => {
               );
             });
         });
+        test("201: ignores unnecessary properties in request body", () => {
+          return request(app)
+            .patch("/api/articles/3")
+            .send({ inc_votes: 20, hello: "goodbye" })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body).not.toHaveProperty("hello");
+            });
+        });
+        test("400: responds with bad request when passed invalid article_id", () => {
+          return request(app)
+            .patch("/api/articles/hello")
+            .send({ inc_votes: 20 })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("400: responds with bad request when sent malformed request body", () => {
+          return request(app)
+            .patch("/api/articles/3")
+            .send({ hello: "goodbye" })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("400: responds with bad request when sent incorrect data type on the request body", () => {
+          return request(app)
+            .patch("/api/articles/3")
+            .send({ inc_votes: "hello" })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("404: responds with not found when article does not exist", () => {
+          return request(app)
+            .patch("/api/articles/1000")
+            .send({ inc_votes: 100 })
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
+            });
+        });
       });
     });
     describe("/api/articles/:article_id/comments", () => {

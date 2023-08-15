@@ -3,7 +3,7 @@ const { getTopics } = require("./db/controllers/topics-controller");
 const {
   getArticles,
   getArticleByID,
-  updateArticle
+  updateArticle,
 } = require("./db/controllers/articles-controller");
 const { getEndpoints } = require("./db/controllers/endpoints-controller.js");
 const {
@@ -15,7 +15,7 @@ const {
 } = require("./db/controllers/comments-controllers.js");
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 app.get("/api", getEndpoints);
 
@@ -30,8 +30,8 @@ app.patch("/api/articles/:article_id", updateArticle);
 app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
 app.use((req, res, next) => {
-  res.status(404).send({msg: "not found"})
-})
+  res.status(404).send({ msg: "not found" });
+});
 
 app.use(handle400s);
 
