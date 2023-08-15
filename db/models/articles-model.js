@@ -1,12 +1,25 @@
 const db = require("../connection");
 
 const readArticles = () => {
-  return db.query(`SELECT * FROM articles ORDER BY created_at DESC;`).then(({ rows }) => {
-    rows.forEach((article) => {
-      delete article.body;
+  return db
+    .query(
+      `SELECT articles.article_id,
+        articles.title,
+        articles.topic,
+        articles.author,
+        articles.article_img_url,
+        articles.created_at,
+        articles.votes,
+        COUNT(+comments.article_id) :: INT AS comment_count
+      FROM articles 
+      LEFT JOIN comments
+      ON articles.article_id=comments.article_id
+      GROUP BY articles.article_id
+      ORDER BY created_at DESC;`
+    )
+    .then(({ rows }) => {
+      return rows;
     });
-    return rows;
-  });
 };
 
 const readArticleByID = (article_id) => {
