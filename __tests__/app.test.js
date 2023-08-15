@@ -178,15 +178,31 @@ describe("app", () => {
         test("201: responds with newly added comment", () => {
           return request(app)
             .post("/api/articles/3/comments")
-            .send({ username: "butter_bridge", body: "This is a test comment." })
+            .send({
+              username: "butter_bridge",
+              body: "This is a test comment.",
+            })
             .expect(201)
             .then(({ body }) => {
-              expect(body).toHaveProperty("comment_id", 19)
-              expect(body).toHaveProperty("article_id", 3)
-              expect(body).toHaveProperty("author", "butter_bridge")
-              expect(body).toHaveProperty("votes", 0)
-              expect(body).toHaveProperty("created_at", expect.any(String))
-              expect(body).toHaveProperty("body", "This is a test comment.")
+              expect(body).toHaveProperty("comment_id", 19);
+              expect(body).toHaveProperty("article_id", 3);
+              expect(body).toHaveProperty("author", "butter_bridge");
+              expect(body).toHaveProperty("votes", 0);
+              expect(body).toHaveProperty("created_at", expect.any(String));
+              expect(body).toHaveProperty("body", "This is a test comment.");
+            });
+        });
+        test("404: responds with not found if the article does not exist", () => {
+          return request(app)
+            .post("/api/articles/3000/comments")
+            .send({
+              username: "butter_bridge",
+              body: "This is a test comment.",
+            })
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
             });
         });
       });
