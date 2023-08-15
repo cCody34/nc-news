@@ -1,4 +1,8 @@
-const { readArticles, readArticleByID } = require("../models/articles-model");
+const {
+  readArticles,
+  readArticleByID,
+  editArticle,
+} = require("../models/articles-model");
 
 const getArticles = (req, res, next) => {
   return readArticles().then((articles) => {
@@ -15,4 +19,13 @@ const getArticleByID = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getArticles, getArticleByID };
+const updateArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { body } = req;
+  const { inc_votes } = body;
+  editArticle(inc_votes, article_id).then((updatedArticle) => {
+    res.status(201).send(updatedArticle)
+  });
+};
+
+module.exports = { getArticles, getArticleByID, updateArticle };
