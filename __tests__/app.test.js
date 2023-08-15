@@ -192,6 +192,25 @@ describe("app", () => {
               expect(body).toHaveProperty("body", "This is a test comment.");
             });
         });
+        test("201: ignores unnecessary properties in request body", () => {
+          return request(app)
+            .post("/api/articles/3/comments")
+            .send({
+              username: "butter_bridge",
+              body: "This is a test comment.",
+              hello: "goodbye",
+            })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body).toHaveProperty("comment_id", 19);
+              expect(body).toHaveProperty("article_id", 3);
+              expect(body).toHaveProperty("author", "butter_bridge");
+              expect(body).toHaveProperty("votes", 0);
+              expect(body).toHaveProperty("created_at", expect.any(String));
+              expect(body).toHaveProperty("body", "This is a test comment.");
+              expect(body).not.toHaveProperty("hello");
+            });
+        });
         test("404: responds with not found if the article does not exist", () => {
           return request(app)
             .post("/api/articles/3000/comments")
@@ -236,7 +255,7 @@ describe("app", () => {
             .post("/api/articles/3/comments")
             .send({
               username: 3,
-              body: {key: "value"},
+              body: { key: "value" },
             })
             .expect(400)
             .then(({ body }) => {
