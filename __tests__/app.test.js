@@ -129,13 +129,19 @@ describe("app", () => {
       });
       test("200: comments are returned in descending order of date created", () => {
         return request(app)
-        .get("/api/articles/1/comments")
-        .expect(200)
-        .then(({ body }) => {
-          const { comments } = body;
-          expect(comments).toBeSortedBy("created_at", { descending: true });
+          .get("/api/articles/1/comments")
+          .expect(200)
+          .then(({ body }) => {
+            const { comments } = body;
+            expect(comments).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+      test("400: returns message when passed invalid article_id", () => {
+        return request(app).get("/api/articles/hello/comments").expect(400).then(({body}) => {
+          const {msg} = body;
+          expect(msg).toBe("bad request")
         });
-      })
+      });
     });
   });
   describe("ALL /notapath", () => {

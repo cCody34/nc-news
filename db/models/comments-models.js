@@ -1,7 +1,6 @@
 const db = require("../connection");
 
 exports.readCommentsByArticle = (article_id) => {
-    console.log(article_id, "<<<id in model");
   return db.query(
     `SELECT comments.comment_id,
     comments.votes,
