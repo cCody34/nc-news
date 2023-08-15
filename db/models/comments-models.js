@@ -10,7 +10,8 @@ exports.readCommentsByArticle = (article_id) => {
     comments.body,
     comments.article_id
     FROM comments
-    WHERE article_id = $1`,
+    WHERE article_id = $1
+    ORDER BY created_at DESC`,
     [article_id]
   ).then(({rows}) => {
     return rows

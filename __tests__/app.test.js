@@ -127,6 +127,15 @@ describe("app", () => {
             });
           });
       });
+      test("200: comments are returned in descending order of date created", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { comments } = body;
+          expect(comments).toBeSortedBy("created_at", { descending: true });
+        });
+      })
     });
   });
   describe("ALL /notapath", () => {
