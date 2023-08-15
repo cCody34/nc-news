@@ -77,5 +77,24 @@ describe("app", () => {
           });
       });
     });
+    describe("/api/articles/:article_id/comments", () => {
+      test("200: responds with 200 status and an array of comments for the given article_id", () => {
+        return request(app)
+          .get("/api/articles/1/comments")
+          .expect(200)
+          .then(({ body }) => {
+            const { comments } = body;
+            expect(comments).toHaveLength(11);
+            comments.forEach((comment) => {
+              expect(comment).toHaveProperty("comment_id", expect.any(Number));
+              expect(comment).toHaveProperty("votes", expect.any(Number));
+              expect(comment).toHaveProperty("created_at", expect.any(String));
+              expect(comment).toHaveProperty("author", expect.any(String));
+              expect(comment).toHaveProperty("body", expect.any(String));
+              expect(comment).toHaveProperty("article_id", expect.any(Number));
+            });
+          });
+      });
+    });
   });
 });
