@@ -41,6 +41,38 @@ describe("app", () => {
     });
   });
   describe("/api/articles", () => {
+    test("200: responds with a 200 status and an articles array on the response body", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toHaveLength(13);
+          articles.forEach((article) => {
+            expect(article).toHaveProperty("author", expect.any(String));
+            expect(article).toHaveProperty("title", expect.any(String));
+            expect(article).toHaveProperty("article_id", expect.any(Number));
+            expect(article).toHaveProperty("topic", expect.any(String));
+            expect(article).toHaveProperty("created_at", expect.any(String));
+            expect(article).toHaveProperty("votes", expect.any(Number));
+            expect(article).toHaveProperty(
+              "article_img_url",
+              expect.any(String)
+            );
+            expect(article).not.toHaveProperty("body");
+            expect(article).toHaveProperty("comment_count", expect.any(Number));
+          });
+        });
+    });
+    test("200: articles are returned in descending order of date", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeSortedBy("created_at", { descending: true });
+        });
+    });
     describe("/api/articles/:article_id", () => {
       test("200: responds with 200 status and an article object with the correct id", () => {
         return request(app)
@@ -76,6 +108,17 @@ describe("app", () => {
             );
           });
       });
+    });
+  });
+  describe("ALL /notapath", () => {
+    test("404: should respond with a custom 404 message when the path is not found", () => {
+      return request(app)
+        .get("/api/hello")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("not found");
+        });
     });
   });
 });
