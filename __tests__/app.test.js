@@ -341,6 +341,22 @@ describe("app", () => {
       });
     });
   });
+  describe("/api/users", () => {
+    describe("GET requests /api/users", () => {
+      test("200: responds with a users array on the response body", () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({body}) => {
+          body.forEach(user => {
+            expect(user).toHaveProperty("username", expect.any(String));
+            expect(user).toHaveProperty("name", expect.any(String));
+            expect(user).toHaveProperty("avatar_url", expect.any(String));
+          })
+        })
+      })
+    })
+  })
   describe("ALL /notapath", () => {
     test("404: should respond with a custom 404 message when the path is not found", () => {
       return request(app)
