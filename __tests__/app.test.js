@@ -65,47 +65,68 @@ describe("app", () => {
         });
     });
     describe("/api/articles queries", () => {
-      test("200: articles are returned in descending order of date by default", () => {
-        return request(app)
-          .get("/api/articles")
-          .expect(200)
-          .then(({ body }) => {
-            const { articles } = body;
-            expect(articles).toBeSortedBy("created_at", { descending: true });
-          });
-      });
-      test("200: articles takes a topic query, which filters articles by topic", () => {
-        return request(app)
-          .get("/api/articles?topic=cats")
-          .expect(200)
-          .then(({ body }) => {
-            const { articles } = body;
-            expect(articles.length > 0).toBe(true);
-            articles.forEach((article) => {
-              expect(article.topic).toBe("cats");
+      describe("/api/articles?topic", () => {
+        test("200: articles takes a topic query, which filters articles by topic", () => {
+          return request(app)
+            .get("/api/articles?topic=cats")
+            .expect(200)
+            .then(({ body }) => {
+              const { articles } = body;
+              expect(articles.length > 0).toBe(true);
+              articles.forEach((article) => {
+                expect(article.topic).toBe("cats");
+              });
             });
-          });
+        });
+        test("200: responds with an empty array when passed an existing topic with no articles", () => {
+          return request(app)
+            .get("/api/articles?topic=paper")
+            .expect(200)
+            .then(({ body }) => {
+              const { articles } = body;
+              expect(articles).toEqual([]);
+            });
+        });
+        test("404: responds with not found when passed a topic that doesn't exist", () => {
+          return request(app)
+            .get("/api/articles?topic=chicken")
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
+            });
+        });
       });
-      test("200: responds with an empty array when passed an existing topic with no articles", () => {
-        return request(app)
-          .get("/api/articles?topic=paper")
+      describe("/api/articles?sort_by", () => {
+        test("200: articles are returned in descending order of date by default", () => {
+          return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+              const { articles } = body;
+              expect(articles).toBeSortedBy("created_at", { descending: true });
+            });
+        });
+        test("200: articles takes a sort_by query, which can sort by any valid column", () => {
+          return request(app)
+          .get("/api/articles?sort_by=article_id")
           .expect(200)
           .then(({ body }) => {
             const { articles } = body;
-            expect(articles).toEqual([]);
+            expect(articles).toBeSortedBy("article_id", { descending: true });
           });
-      });
-      test("404: responds with not found when passed a topic that doesn't exist", () => {
-        return request(app)
-          .get("/api/articles?topic=chicken")
-          .expect(404)
+        });
+        test("400: responds with bad request when passed an invalid sort_by query", () => {
+          return request(app)
+          .get("/api/articles?sort_by=hello")
+          .expect(400)
           .then(({ body }) => {
             const { msg } = body;
-            expect(msg).toBe("not found");
+            expect(msg).toBe("bad request");
           });
+        })
       });
     });
-
     describe("/api/articles/:article_id", () => {
       describe("GET /api/articles/:article_id", () => {
         test("200: responds with 200 status and an article object with the correct id", () => {

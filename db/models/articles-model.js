@@ -1,4 +1,5 @@
 const db = require("../connection");
+const { sort } = require("../data/test-data/articles");
 
 exports.checkArticleExists = (article_id) => {
   return db
@@ -10,7 +11,21 @@ exports.checkArticleExists = (article_id) => {
     });
 };
 
-exports.readArticles = (topic) => {
+exports.readArticles = (topic, sort_by = "created_at") => {
+  const acceptedSorts = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "article_img_url",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  if (!acceptedSorts.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
   let baseSqlString = `SELECT articles.article_id,
                         articles.title,
                         articles.topic,
@@ -27,7 +42,7 @@ exports.readArticles = (topic) => {
     baseSqlString += ` WHERE articles.topic = $1`;
     queryValues.push(topic);
   }
-  baseSqlString += ` GROUP BY articles.article_id ORDER BY created_at DESC;`;
+  baseSqlString += ` GROUP BY articles.article_id ORDER BY ${sort_by} DESC;`;
   return db.query(baseSqlString, queryValues).then(({ rows }) => {
     return rows;
   });
