@@ -4,11 +4,20 @@ const {
   editArticle,
   checkArticleExists,
 } = require("../models/articles-model");
+const { checkTopicExists } = require("../models/topics-model");
 
 const getArticles = (req, res, next) => {
-  return readArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
+  const { topic } = req.query;
+  const promises = [readArticles(topic)];
+  if (topic) {
+    promises.push(checkTopicExists(topic));
+  }
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const articles = resolvedPromises[0];
+      res.status(200).send({ articles });
+    })
+    .catch(next);
 };
 
 const getArticleByID = (req, res, next) => {

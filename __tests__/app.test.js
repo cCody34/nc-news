@@ -64,15 +64,48 @@ describe("app", () => {
           });
         });
     });
-    test("200: articles are returned in descending order of date", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body }) => {
-          const { articles } = body;
-          expect(articles).toBeSortedBy("created_at", { descending: true });
-        });
+    describe("/api/articles queries", () => {
+      test("200: articles are returned in descending order of date by default", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body }) => {
+            const { articles } = body;
+            expect(articles).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+      test("200: articles takes a topic query, which filters articles by topic", () => {
+        return request(app)
+          .get("/api/articles?topic=cats")
+          .expect(200)
+          .then(({ body }) => {
+            const { articles } = body;
+            expect(articles.length > 0).toBe(true);
+            articles.forEach((article) => {
+              expect(article.topic).toBe("cats");
+            });
+          });
+      });
+      test("200: responds with an empty array when passed an existing topic with no articles", () => {
+        return request(app)
+          .get("/api/articles?topic=paper")
+          .expect(200)
+          .then(({ body }) => {
+            const { articles } = body;
+            expect(articles).toEqual([]);
+          });
+      });
+      test("404: responds with not found when passed a topic that doesn't exist", () => {
+        return request(app)
+          .get("/api/articles?topic=chicken")
+          .expect(404)
+          .then(({ body }) => {
+            const { msg } = body;
+            expect(msg).toBe("not found");
+          });
+      });
     });
+
     describe("/api/articles/:article_id", () => {
       describe("GET /api/articles/:article_id", () => {
         test("200: responds with 200 status and an article object with the correct id", () => {
