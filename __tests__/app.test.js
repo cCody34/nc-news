@@ -109,22 +109,42 @@ describe("app", () => {
         });
         test("200: articles takes a sort_by query, which can sort by any valid column", () => {
           return request(app)
-          .get("/api/articles?sort_by=article_id")
-          .expect(200)
-          .then(({ body }) => {
-            const { articles } = body;
-            expect(articles).toBeSortedBy("article_id", { descending: true });
-          });
+            .get("/api/articles?sort_by=article_id")
+            .expect(200)
+            .then(({ body }) => {
+              const { articles } = body;
+              expect(articles).toBeSortedBy("article_id", { descending: true });
+            });
         });
         test("400: responds with bad request when passed an invalid sort_by query", () => {
           return request(app)
-          .get("/api/articles?sort_by=hello")
-          .expect(400)
-          .then(({ body }) => {
-            const { msg } = body;
-            expect(msg).toBe("bad request");
-          });
-        })
+            .get("/api/articles?sort_by=hello")
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+      });
+      describe("/api/articles?order", () => {
+        test("200: articles takes an order query, which can change the order the articles are sorted by", () => {
+          return request(app)
+            .get("/api/articles?order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              const { articles } = body;
+              expect(articles).toBeSortedBy("created_at", { ascending: true });
+            });
+        });
+        test("400: responds with bad request when passed an invalid order query", () => {
+          return request(app)
+            .get("/api/articles?order=hello")
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
       });
     });
     describe("/api/articles/:article_id", () => {

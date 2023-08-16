@@ -11,7 +11,8 @@ exports.checkArticleExists = (article_id) => {
     });
 };
 
-exports.readArticles = (topic, sort_by = "created_at") => {
+exports.readArticles = (topic, sort_by = "created_at", order = "desc") => {
+  const acceptedOrders = ["asc", "desc"];
   const acceptedSorts = [
     "article_id",
     "title",
@@ -22,7 +23,7 @@ exports.readArticles = (topic, sort_by = "created_at") => {
     "votes",
     "comment_count",
   ];
-  if (!acceptedSorts.includes(sort_by)) {
+  if (!acceptedSorts.includes(sort_by) || !acceptedOrders.includes(order)) {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
 
@@ -42,7 +43,7 @@ exports.readArticles = (topic, sort_by = "created_at") => {
     baseSqlString += ` WHERE articles.topic = $1`;
     queryValues.push(topic);
   }
-  baseSqlString += ` GROUP BY articles.article_id ORDER BY ${sort_by} DESC;`;
+  baseSqlString += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
   return db.query(baseSqlString, queryValues).then(({ rows }) => {
     return rows;
   });
