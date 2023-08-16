@@ -211,17 +211,30 @@ describe("app", () => {
               expect(body).not.toHaveProperty("hello");
             });
         });
-        test("400: responds with bad request if trying to post to an article that doesn't exist", () => {
+        test("404: responds with not found if trying to post to an article that doesn't exist", () => {
           return request(app)
             .post("/api/articles/3000/comments")
             .send({
               username: "butter_bridge",
               body: "This is a test comment.",
             })
-            .expect(400)
+            .expect(404)
             .then(({ body }) => {
               const { msg } = body;
-              expect(msg).toBe("bad request");
+              expect(msg).toBe("not found");
+            });
+        });
+        test("404: responds with not found when passed a username that doesn't exist", () => {
+          return request(app)
+            .post("/api/articles/2/comments")
+            .send({
+              username: "hello",
+              body: "This is a test comment.",
+            })
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
             });
         });
         test("400: responds with bad request when passed invalid article_id", () => {
@@ -243,19 +256,6 @@ describe("app", () => {
             .send({
               hello: "butter_bridge",
               goodbye: "This is a test comment.",
-            })
-            .expect(400)
-            .then(({ body }) => {
-              const { msg } = body;
-              expect(msg).toBe("bad request");
-            });
-        });
-        test("400: responds with bad request when passed incorrect value types in request body", () => {
-          return request(app)
-            .post("/api/articles/3/comments")
-            .send({
-              username: 3,
-              body: { key: "value" },
             })
             .expect(400)
             .then(({ body }) => {

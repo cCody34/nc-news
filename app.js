@@ -7,6 +7,7 @@ const {
 const { getEndpoints } = require("./db/controllers/endpoints-controller.js");
 const {
   handle400s,
+  handle404s,
   handleCustomErrors,
 } = require("./db/error-handlers/error.js");
 const {
@@ -34,6 +35,8 @@ app.use((req, res, next) => {
 });
 
 app.use(handle400s);
+
+app.use(handle404s);
 
 app.use(handleCustomErrors);
 
