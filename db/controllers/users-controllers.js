@@ -2,6 +2,6 @@ const { readUsers } = require("../models/users-models");
 
 exports.getUsers = (req, res, next) => {
   readUsers().then((users) => {
-    res.status(200).send(users);
+    res.status(200).send({ users });
   });
 };
