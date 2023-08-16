@@ -32,15 +32,16 @@ exports.postComment = (req, res, next) => {
 };
 
 exports.deleteComment = (req, res, next) => {
-  const { params } = req;
-  const { comment_id } = params;
+  const { comment_id } = req.params;
+  console.log(comment_id)
   const promises = [
     removeComment(+comment_id),
     checkCommentExists(+comment_id),
   ];
+
  Promise.all(promises)
     .then(() => {
-      res.status(204).send({});
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);
