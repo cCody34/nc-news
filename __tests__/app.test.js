@@ -104,6 +104,7 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
+              expect(articles.length > 0).toBe(true);
               expect(articles).toBeSortedBy("created_at", { descending: true });
             });
         });
@@ -113,6 +114,7 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
+              expect(articles.length > 0).toBe(true);
               expect(articles).toBeSortedBy("article_id", { descending: true });
             });
         });
@@ -133,6 +135,7 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
+              expect(articles.length > 0).toBe(true);
               expect(articles).toBeSortedBy("created_at", { ascending: true });
             });
         });
@@ -145,6 +148,19 @@ describe("app", () => {
               expect(msg).toBe("bad request");
             });
         });
+      });
+      test("200: articles takes topic, sort_by and order queries that work when all used together", () => {
+        return request(app)
+          .get("/api/articles?topic=mitch&sort_by=title&order=asc")
+          .expect(200)
+          .then(({ body }) => {
+            const { articles } = body;
+            expect(articles.length > 0).toBe(true);
+            expect(articles).toBeSortedBy("title", { ascending: true });
+            articles.forEach((article) => {
+              expect(article.topic).toBe("mitch");
+            });
+          });
       });
     });
     describe("/api/articles/:article_id", () => {
