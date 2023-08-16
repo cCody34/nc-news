@@ -22,7 +22,7 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles",
+    "description": "serves an array of all articles which can be filtered by topic and sorted by any of valid column in ascending or descending order",
     "queries": ["author", "topic", "sort_by", "order"],
     "requestBodyFormat": "N/A",
     "exampleResponse": {
