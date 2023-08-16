@@ -341,6 +341,29 @@ describe("app", () => {
       });
     });
   });
+  describe("/api/comments", () => {
+    describe("/api/comments/:comment_id", () => {
+      describe("DELETE requests /api/comments/:comment__id", () => {
+        test("204: deletes comment and responds with no content on the response body", () => {
+          return request(app)
+            .delete("/api/comments/4")
+            .expect(204)
+            .then(({ body }) => {
+              expect(body).toEqual({});
+            });
+        });
+        test("404: responds with not found when comment does not exist", () => {
+          return request(app)
+            .delete("/api/comments/3000")
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toEqual("not found");
+            });
+        });
+      });
+    });
+  });
   describe("ALL /notapath", () => {
     test("404: should respond with a custom 404 message when the path is not found", () => {
       return request(app)

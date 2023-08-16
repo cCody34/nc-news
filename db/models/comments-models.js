@@ -11,7 +11,7 @@ exports.readCommentsByArticle = (article_id) => {
     comments.article_id
     FROM comments
     WHERE article_id = $1
-    ORDER BY created_at DESC`,
+    ORDER BY created_at DESC;`,
       [article_id]
     )
     .then(({ rows }) => {
@@ -30,5 +30,20 @@ exports.insertComment = (article_id, author, body) => {
     )
     .then(({ rows }) => {
       return rows[0];
+    });
+};
+
+exports.removeComment = (comment_id) => {
+  return db.query(`DELETE FROM comments WHERE comment_id = $1;`, [comment_id]);
+};
+
+exports.checkCommentExists = (comment_id) => {
+  return db
+    .query(`SELECT * FROM comments WHERE comment_id = $1;`, [comment_id])
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "not found" });
+      }
+      return rows;
     });
 };
