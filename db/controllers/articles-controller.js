@@ -31,7 +31,7 @@ const updateArticle = (req, res, next) => {
   Promise.all(promises)
     .then((resolvedPromises) => {
       const updatedArticle = resolvedPromises[0];
-      res.status(201).send(updatedArticle);
+      res.status(200).send(updatedArticle);
     })
     .catch(next);
 };

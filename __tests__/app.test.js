@@ -82,7 +82,7 @@ describe("app", () => {
               const { body } = response;
               expect(body).toHaveProperty("author", expect.any(String));
               expect(body).toHaveProperty("title", expect.any(String));
-              expect(body).toHaveProperty("article_id", expect.any(Number));
+              expect(body).toHaveProperty("article_id", 2);
               expect(body).toHaveProperty("body", expect.any(String));
               expect(body).toHaveProperty("topic", expect.any(String));
               expect(body).toHaveProperty("created_at", expect.any(String));
@@ -114,11 +114,11 @@ describe("app", () => {
         });
       });
       describe("PATCH /api/articles/:article_id", () => {
-        test("201: responds with the updated article", () => {
+        test("200: responds with the updated article", () => {
           return request(app)
             .patch("/api/articles/2")
             .send({ inc_votes: 20 })
-            .expect(201)
+            .expect(200)
             .then(({ body }) => {
               expect(body).toHaveProperty("article_id", 2);
               expect(body).toHaveProperty("title", expect.any(String));
@@ -133,11 +133,11 @@ describe("app", () => {
               );
             });
         });
-        test("201: ignores unnecessary properties in request body", () => {
+        test("200: ignores unnecessary properties in request body", () => {
           return request(app)
             .patch("/api/articles/3")
             .send({ inc_votes: 20, hello: "goodbye" })
-            .expect(201)
+            .expect(200)
             .then(({ body }) => {
               expect(body).not.toHaveProperty("hello");
             });
