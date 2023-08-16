@@ -1,5 +1,8 @@
 const { checkArticleExists } = require("../models/articles-model.js");
-const { readCommentsByArticle } = require("../models/comments-models.js");
+const {
+  readCommentsByArticle,
+  insertComment,
+} = require("../models/comments-models.js");
 
 exports.getCommentsByArticle = (req, res, next) => {
   const { article_id } = req.params;
@@ -11,6 +14,17 @@ exports.getCommentsByArticle = (req, res, next) => {
     .then((resolvedPromises) => {
       const comments = resolvedPromises[0];
       res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.postComment = (req, res, next) => {
+  const commentToPost = req.body;
+  const {username, body} = commentToPost
+  const { article_id } = req.params;
+  insertComment(article_id, username, body)
+    .then((comment) => {
+      res.status(201).send(comment);
     })
     .catch(next);
 };
