@@ -211,17 +211,17 @@ describe("app", () => {
               expect(body).not.toHaveProperty("hello");
             });
         });
-        test("404: responds with not found if the article does not exist", () => {
+        test("400: responds with bad request if trying to post to an article that doesn't exist", () => {
           return request(app)
             .post("/api/articles/3000/comments")
             .send({
               username: "butter_bridge",
               body: "This is a test comment.",
             })
-            .expect(404)
+            .expect(400)
             .then(({ body }) => {
               const { msg } = body;
-              expect(msg).toBe("not found");
+              expect(msg).toBe("bad request");
             });
         });
         test("400: responds with bad request when passed invalid article_id", () => {
