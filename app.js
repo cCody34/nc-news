@@ -18,13 +18,14 @@ const {
 } = require("./db/controllers/comments-controllers.js");
 const { getUsers } = require("./db/controllers/users-controllers");
 const app = express();
-const {topicsRouter} = require("./routers/topics-router");
+const { topicsRouter } = require("./routers/topics-router");
+const usersRouter = require("./routers/users-router");
 
 app.use(express.json());
 
 app.get("/api", getEndpoints);
 
-app.use("/api/topics", topicsRouter)
+app.use("/api/topics", topicsRouter);
 
 app.get("/api/articles", getArticles);
 
@@ -38,7 +39,7 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 app.delete("/api/comments/:comment_id", deleteComment);
 
-app.get("/api/users", getUsers);
+app.use("/api/users", usersRouter)
 
 app.use((req, res, next) => {
   res.status(404).send({ msg: "not found" });
