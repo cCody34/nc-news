@@ -72,9 +72,29 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
-              expect(articles.length > 0).toBe(true);
+              expect(articles).toHaveLength(1);
               articles.forEach((article) => {
                 expect(article.topic).toBe("cats");
+                expect(article).toHaveProperty("author", expect.any(String));
+                expect(article).toHaveProperty("title", expect.any(String));
+                expect(article).toHaveProperty(
+                  "article_id",
+                  expect.any(Number)
+                );
+                expect(article).toHaveProperty(
+                  "created_at",
+                  expect.any(String)
+                );
+                expect(article).toHaveProperty("votes", expect.any(Number));
+                expect(article).toHaveProperty(
+                  "article_img_url",
+                  expect.any(String)
+                );
+                expect(article).not.toHaveProperty("body");
+                expect(article).toHaveProperty(
+                  "comment_count",
+                  expect.any(Number)
+                );
               });
             });
         });
@@ -104,8 +124,31 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
-              expect(articles.length > 0).toBe(true);
+              expect(articles).toHaveLength(13);
               expect(articles).toBeSortedBy("created_at", { descending: true });
+              articles.forEach((article) => {
+                expect(article).toHaveProperty("author", expect.any(String));
+                expect(article).toHaveProperty("title", expect.any(String));
+                expect(article).toHaveProperty(
+                  "article_id",
+                  expect.any(Number)
+                );
+                expect(article).toHaveProperty("topic", expect.any(String));
+                expect(article).toHaveProperty(
+                  "created_at",
+                  expect.any(String)
+                );
+                expect(article).toHaveProperty("votes", expect.any(Number));
+                expect(article).toHaveProperty(
+                  "article_img_url",
+                  expect.any(String)
+                );
+                expect(article).not.toHaveProperty("body");
+                expect(article).toHaveProperty(
+                  "comment_count",
+                  expect.any(Number)
+                );
+              });
             });
         });
         test("200: articles takes a sort_by query, which can sort by any valid column", () => {
@@ -114,8 +157,31 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
-              expect(articles.length > 0).toBe(true);
+              expect(articles).toHaveLength(13);
               expect(articles).toBeSortedBy("article_id", { descending: true });
+              articles.forEach((article) => {
+                expect(article).toHaveProperty("author", expect.any(String));
+                expect(article).toHaveProperty("title", expect.any(String));
+                expect(article).toHaveProperty(
+                  "article_id",
+                  expect.any(Number)
+                );
+                expect(article).toHaveProperty("topic", expect.any(String));
+                expect(article).toHaveProperty(
+                  "created_at",
+                  expect.any(String)
+                );
+                expect(article).toHaveProperty("votes", expect.any(Number));
+                expect(article).toHaveProperty(
+                  "article_img_url",
+                  expect.any(String)
+                );
+                expect(article).not.toHaveProperty("body");
+                expect(article).toHaveProperty(
+                  "comment_count",
+                  expect.any(Number)
+                );
+              });
             });
         });
         test("400: responds with bad request when passed an invalid sort_by query", () => {
@@ -135,8 +201,31 @@ describe("app", () => {
             .expect(200)
             .then(({ body }) => {
               const { articles } = body;
-              expect(articles.length > 0).toBe(true);
+              expect(articles).toHaveLength(13);
               expect(articles).toBeSortedBy("created_at", { ascending: true });
+              articles.forEach((article) => {
+                expect(article).toHaveProperty("author", expect.any(String));
+                expect(article).toHaveProperty("title", expect.any(String));
+                expect(article).toHaveProperty(
+                  "article_id",
+                  expect.any(Number)
+                );
+                expect(article).toHaveProperty("topic", expect.any(String));
+                expect(article).toHaveProperty(
+                  "created_at",
+                  expect.any(String)
+                );
+                expect(article).toHaveProperty("votes", expect.any(Number));
+                expect(article).toHaveProperty(
+                  "article_img_url",
+                  expect.any(String)
+                );
+                expect(article).not.toHaveProperty("body");
+                expect(article).toHaveProperty(
+                  "comment_count",
+                  expect.any(Number)
+                );
+              });
             });
         });
         test("400: responds with bad request when passed an invalid order query", () => {
@@ -155,10 +244,24 @@ describe("app", () => {
           .expect(200)
           .then(({ body }) => {
             const { articles } = body;
-            expect(articles.length > 0).toBe(true);
+            expect(articles).toHaveLength(12);
             expect(articles).toBeSortedBy("title", { ascending: true });
             articles.forEach((article) => {
               expect(article.topic).toBe("mitch");
+              expect(article).toHaveProperty("author", expect.any(String));
+              expect(article).toHaveProperty("title", expect.any(String));
+              expect(article).toHaveProperty("article_id", expect.any(Number));
+              expect(article).toHaveProperty("created_at", expect.any(String));
+              expect(article).toHaveProperty("votes", expect.any(Number));
+              expect(article).toHaveProperty(
+                "article_img_url",
+                expect.any(String)
+              );
+              expect(article).not.toHaveProperty("body");
+              expect(article).toHaveProperty(
+                "comment_count",
+                expect.any(Number)
+              );
             });
           });
       });
@@ -471,7 +574,7 @@ describe("app", () => {
           .expect(200)
           .then(({ body }) => {
             const { users } = body;
-            expect(users).toHaveLength(4)
+            expect(users).toHaveLength(4);
             users.forEach((user) => {
               expect(user).toHaveProperty("username", expect.any(String));
               expect(user).toHaveProperty("name", expect.any(String));
