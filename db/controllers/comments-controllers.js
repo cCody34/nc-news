@@ -53,5 +53,5 @@ exports.updateComment = (req, res, next) => {
   const { inc_votes } = req.body;
   editComment(inc_votes, comment_id).then((comment) => {
     res.status(200).send(comment);
-  });
+  }).catch(next);
 };

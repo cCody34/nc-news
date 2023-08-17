@@ -621,6 +621,36 @@ describe("app", () => {
               expect(body).not.toHaveProperty("hello");
             });
         });
+        test("400: responds with bad request when passed an invalid comment_id", () => {
+          return request(app)
+            .patch("/api/comments/hello")
+            .send({ inc_votes: 20 })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("400: responds with bad request when sent malformed request body", () => {
+          return request(app)
+            .patch("/api/comments/3")
+            .send({ hello: "goodbye" })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
+        test("400: responds with bad request when sent incorrect data type of request body", () => {
+          return request(app)
+            .patch("/api/comments/3")
+            .send({ inc_votes: "hello" })
+            .expect(400)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("bad request");
+            });
+        });
       });
     });
   });
