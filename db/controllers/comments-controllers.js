@@ -51,7 +51,14 @@ exports.deleteComment = (req, res, next) => {
 exports.updateComment = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
-  editComment(inc_votes, comment_id).then((comment) => {
-    res.status(200).send(comment);
-  }).catch(next);
+  const promises = [
+    checkCommentExists(comment_id),
+    editComment(inc_votes, comment_id),
+  ];
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const comment = resolvedPromises[1];
+      res.status(200).send(comment);
+    })
+    .catch(next);
 };

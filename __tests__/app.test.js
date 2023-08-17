@@ -651,6 +651,16 @@ describe("app", () => {
               expect(msg).toBe("bad request");
             });
         });
+        test("404: responds with not found when comment with that comment_id does not exist", () => {
+          return request(app)
+            .patch("/api/comments/1000")
+            .send({ inc_votes: 100 })
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
+            });
+        });
       });
     });
   });
