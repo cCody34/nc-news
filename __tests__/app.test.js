@@ -573,6 +573,55 @@ describe("app", () => {
             });
         });
       });
+      describe("PATCH requests /api/comments/:comment_id", () => {
+        test("200: responds with the updated comment", () => {
+          return request(app)
+            .patch("/api/comments/4")
+            .send({ inc_votes: 200 })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toHaveProperty(
+                "body",
+                " I carry a log — yes. Is it funny to you? It is not to me."
+              );
+              expect(body).toHaveProperty("votes", 100);
+              expect(body).toHaveProperty("author", "icellusedkars");
+              expect(body).toHaveProperty("article_id", 1);
+              expect(body).toHaveProperty(
+                "created_at",
+                "2020-02-23T12:01:00.000Z"
+              );
+            });
+        });
+        test("200: decreases comment votes when inc_votes is negative", () => {
+          return request(app)
+            .patch("/api/comments/4")
+            .send({ inc_votes: -200 })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toHaveProperty(
+                "body",
+                " I carry a log — yes. Is it funny to you? It is not to me."
+              );
+              expect(body).toHaveProperty("votes", -300);
+              expect(body).toHaveProperty("author", "icellusedkars");
+              expect(body).toHaveProperty("article_id", 1);
+              expect(body).toHaveProperty(
+                "created_at",
+                "2020-02-23T12:01:00.000Z"
+              );
+            });
+        });
+        test("200: ignores unnecessary properties in the request body", () => {
+          return request(app)
+            .patch("/api/comments/4")
+            .send({ inc_votes: 300, hello: "goodbye" })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).not.toHaveProperty("hello");
+            });
+        });
+      });
     });
   });
   describe("/api/users", () => {
