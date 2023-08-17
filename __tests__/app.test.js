@@ -344,14 +344,14 @@ describe("app", () => {
   describe("/api/comments", () => {
     describe("/api/comments/:comment_id", () => {
       describe("DELETE requests /api/comments/:comment__id", () => {
-        // test("204: deletes comment and responds with no content on the response body", () => {
-        //   return request(app)
-        //     .delete("/api/comments/4")
-        //     .expect(204)
-        //     .then(({ body }) => {
-        //       expect(body).toEqual({});
-        //     });
-        // });
+        test("204: deletes comment and responds with no content on the response body", () => {
+          return request(app)
+            .delete("/api/comments/5")
+            .expect(204)
+            .then(({ body }) => {
+              expect(body).toEqual({});
+            });
+        });
         test("404: responds with not found when comment does not exist", () => {
           return request(app)
             .delete("/api/comments/3000")

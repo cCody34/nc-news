@@ -34,7 +34,11 @@ exports.insertComment = (article_id, author, body) => {
 };
 
 exports.removeComment = (comment_id) => {
-  return db.query(`DELETE FROM comments WHERE comment_id = $1;`, [comment_id]);
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1;`, [comment_id])
+    .then(() => {
+      return
+    });
 };
 
 exports.checkCommentExists = (comment_id) => {

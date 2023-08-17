@@ -33,10 +33,9 @@ exports.postComment = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
-  console.log(comment_id)
   const promises = [
-    removeComment(+comment_id),
     checkCommentExists(+comment_id),
+    removeComment(+comment_id),
   ];
 
  Promise.all(promises)
