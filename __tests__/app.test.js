@@ -93,6 +93,14 @@ describe("app", () => {
               );
             });
         });
+        test("200: responds with article object that includes comment count", () => {
+          return request(app)
+            .get("/api/articles/9")
+            .then((response) => {
+              const { body } = response;
+              expect(body).toHaveProperty("comment_count", 2)
+            });
+        })
         test("400: responds with 400 status and a message when sent bad request", () => {
           return request(app)
             .get("/api/articles/hello")
