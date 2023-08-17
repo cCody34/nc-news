@@ -4,6 +4,12 @@
 
 The hosted version of this repository can be found at: https://news-ynvj.onrender.com/
 
+## Project Summary
+
+This project is an API for the purpose of accessing application data programmatically.
+
+It mimics the building of a real world backend service.
+
 ## Repo set up
 
 ### Cloning this repo
@@ -35,6 +41,10 @@ npm i pg
 husky, jest, jest-extended, jest-sorted, pg-format and supertest should all be installed as developer dependencies using the following commands in the CLI:
 
 ```
+npm i -D husky
+npx husky install
+npx husky add .husky/pre-commit "npm test"
+git add .husky/pre-commit
 npm i -D jest
 npm i -D jest-extended
 npm i -D jest-sorted
@@ -73,6 +83,7 @@ In order to connect to the databases used in this repository (nc_news and nc_new
 These files should assign PGDATABASE to the correct database (for an example look in .env-example), database_name_here should be nc_news for .env.development and nc_news_test for .env.test
 
 ## Node and Postgres versions
+
 The minimum required node version to run this project is 6.9.0/
 
 The minimum required postgres version to run this project is 8.0.
