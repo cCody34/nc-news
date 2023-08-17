@@ -1,5 +1,4 @@
 const express = require("express");
-const { getEndpoints } = require("./db/controllers/endpoints-controller.js");
 const {
   handle400s,
   handle404s,
@@ -10,10 +9,11 @@ const { topicsRouter } = require("./routers/topics-router");
 const usersRouter = require("./routers/users-router");
 const commentsRouter = require("./routers/comments-router");
 const articlesRouter = require("./routers/articles-router");
+const apiRouter = require("./routers/api-router.js");
 
 app.use(express.json());
 
-app.get("/api", getEndpoints);
+app.use("/api", apiRouter)
 
 app.use("/api/topics", topicsRouter);
 
