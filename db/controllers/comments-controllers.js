@@ -4,6 +4,7 @@ const {
   insertComment,
   removeComment,
   checkCommentExists,
+  editComment,
 } = require("../models/comments-models.js");
 
 exports.getCommentsByArticle = (req, res, next) => {
@@ -38,11 +39,26 @@ exports.deleteComment = (req, res, next) => {
     removeComment(+comment_id),
   ];
 
- Promise.all(promises)
+  Promise.all(promises)
     .then(() => {
       res.status(204).send();
     })
     .catch((err) => {
       next(err);
     });
+};
+
+exports.updateComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  const promises = [
+    checkCommentExists(comment_id),
+    editComment(inc_votes, comment_id),
+  ];
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const comment = resolvedPromises[1];
+      res.status(200).send(comment);
+    })
+    .catch(next);
 };
