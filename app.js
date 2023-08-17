@@ -18,12 +18,13 @@ const {
 } = require("./db/controllers/comments-controllers.js");
 const { getUsers } = require("./db/controllers/users-controllers");
 const app = express();
+const {topicsRouter} = require("./routers/topics-router");
 
 app.use(express.json());
 
 app.get("/api", getEndpoints);
 
-app.get("/api/topics", getTopics);
+app.use("/api/topics", topicsRouter)
 
 app.get("/api/articles", getArticles);
 
