@@ -30,31 +30,27 @@ npm init -y
 
 ### Installing dependencies
 
-The dependencies dotenv, express and pg should be installed using the following commands in the CLI:
+The dependencies needed for this project are dotenv, express and pg.
+
+The devDependencies needed for this project are husky, jest, jest-extended, jest-sorted, pg-format and supertest.
+
+These dependencies and devDependencies can all be installed using the following command in the CLI:
 
 ```
-npm i dotenv
-npm i express
-npm i pg
+npm i
 ```
 
-husky, jest, jest-extended, jest-sorted, pg-format and supertest should all be installed as developer dependencies using the following commands in the CLI:
+### Creating the .env files
 
-```
-npm i -D husky
-npx husky install
-npx husky add .husky/pre-commit "npm test"
-git add .husky/pre-commit
-npm i -D jest
-npm i -D jest-extended
-npm i -D jest-sorted
-npm i -D pg-format
-npm i -D supertest
-```
+In order to connect to the databases used in this repository (nc_news and nc_news_test), set up 2 files:
+.env.development
+.env.test
+
+These files should assign PGDATABASE to the correct database (for an example look in .env-example), database_name_here should be nc_news for .env.development and nc_news_test for .env.test
 
 ### Seeding the local database
 
-To seed the local database use the following command in the CLI:
+After setting up the .env files seed the local database using the following command in the CLI:
 
 ```
 npm run seed
@@ -73,14 +69,6 @@ Or to run app specific tests only use the command:
 ```
 npm t app
 ```
-
-## Creating the .env files
-
-In order to connect to the databases used in this repository (nc_news and nc_news_test), set up 2 files:
-.env.development
-.env.test
-
-These files should assign PGDATABASE to the correct database (for an example look in .env-example), database_name_here should be nc_news for .env.development and nc_news_test for .env.test
 
 ## Node and Postgres versions
 
