@@ -291,9 +291,9 @@ describe("app", () => {
             .get("/api/articles/9")
             .then((response) => {
               const { body } = response;
-              expect(body).toHaveProperty("comment_count", 2)
+              expect(body).toHaveProperty("comment_count", 2);
             });
-        })
+        });
         test("400: responds with 400 status and a message when sent bad request", () => {
           return request(app)
             .get("/api/articles/hello")
@@ -589,6 +589,22 @@ describe("app", () => {
               expect(user).toHaveProperty("avatar_url", expect.any(String));
             });
           });
+      });
+    });
+    describe("/api/users/:username", () => {
+      describe("GET requests /api/users/:username", () => {
+        test("200: responds with the correct user object", () => {
+          return request(app)
+            .get("/api/users/icellusedkars")
+            .then(({ body }) => {
+              expect(body).toHaveProperty("username", "icellusedkars");
+              expect(body).toHaveProperty("name", "sam");
+              expect(body).toHaveProperty(
+                "avatar_url",
+                "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+              );
+            });
+        });
       });
     });
   });
