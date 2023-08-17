@@ -1,22 +1,10 @@
 const express = require("express");
-const { getTopics } = require("./db/controllers/topics-controller");
-const {
-  getArticles,
-  getArticleByID,
-  updateArticle,
-} = require("./db/controllers/articles-controller");
 const { getEndpoints } = require("./db/controllers/endpoints-controller.js");
 const {
   handle400s,
   handle404s,
   handleCustomErrors,
 } = require("./db/error-handlers/error.js");
-const {
-  getCommentsByArticle,
-  postComment,
-  deleteComment,
-} = require("./db/controllers/comments-controllers.js");
-const { getUsers } = require("./db/controllers/users-controllers");
 const app = express();
 const { topicsRouter } = require("./routers/topics-router");
 const usersRouter = require("./routers/users-router");
