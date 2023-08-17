@@ -20,6 +20,7 @@ const { getUsers } = require("./db/controllers/users-controllers");
 const app = express();
 const { topicsRouter } = require("./routers/topics-router");
 const usersRouter = require("./routers/users-router");
+const commentsRouter = require("./routers/comments-router");
 
 app.use(express.json());
 
@@ -37,9 +38,9 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
 app.post("/api/articles/:article_id/comments", postComment);
 
-app.delete("/api/comments/:comment_id", deleteComment);
+app.use("/api/comments", commentsRouter);
 
-app.use("/api/users", usersRouter)
+app.use("/api/users", usersRouter);
 
 app.use((req, res, next) => {
   res.status(404).send({ msg: "not found" });
