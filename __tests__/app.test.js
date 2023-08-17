@@ -335,6 +335,25 @@ describe("app", () => {
               );
             });
         });
+        test("200: decreases articles votes when inc_votes is negative", () => {
+          return request(app)
+            .patch("/api/articles/2")
+            .send({ inc_votes: -20 })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toHaveProperty("article_id", 2);
+              expect(body).toHaveProperty("title", expect.any(String));
+              expect(body).toHaveProperty("topic", expect.any(String));
+              expect(body).toHaveProperty("author", expect.any(String));
+              expect(body).toHaveProperty("body", expect.any(String));
+              expect(body).toHaveProperty("created_at", expect.any(String));
+              expect(body).toHaveProperty("votes", -20);
+              expect(body).toHaveProperty(
+                "article_img_url",
+                expect.any(String)
+              );
+            });
+        });
         test("200: ignores unnecessary properties in request body", () => {
           return request(app)
             .patch("/api/articles/3")

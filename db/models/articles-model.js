@@ -1,5 +1,4 @@
 const db = require("../connection");
-const { sort } = require("../data/test-data/articles");
 
 exports.checkArticleExists = (article_id) => {
   return db
