@@ -7,10 +7,13 @@ exports.readUsers = () => {
 };
 
 exports.readUserByUsername = (username) => {
-  console.log(username, "<<< in UM");
   return db
     .query(`SELECT * FROM users WHERE username = $1`, [username])
     .then(({ rows }) => {
-      return rows[0];
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "not found" });
+      } else {
+        return rows[0];
+      }
     });
 };

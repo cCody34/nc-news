@@ -271,6 +271,7 @@ describe("app", () => {
         test("200: responds with 200 status and an article object with the correct id", () => {
           return request(app)
             .get("/api/articles/2")
+            .expect(200)
             .then((response) => {
               const { body } = response;
               expect(body).toHaveProperty("author", expect.any(String));
@@ -596,6 +597,7 @@ describe("app", () => {
         test("200: responds with the correct user object", () => {
           return request(app)
             .get("/api/users/icellusedkars")
+            .expect(200)
             .then(({ body }) => {
               expect(body).toHaveProperty("username", "icellusedkars");
               expect(body).toHaveProperty("name", "sam");
@@ -603,6 +605,15 @@ describe("app", () => {
                 "avatar_url",
                 "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
               );
+            });
+        });
+        test("404: responds with not found when user with that username does not exist", () => {
+          return request(app)
+            .get("/api/users/hello")
+            .expect(404)
+            .then(({ body }) => {
+              const { msg } = body;
+              expect(msg).toBe("not found");
             });
         });
       });
