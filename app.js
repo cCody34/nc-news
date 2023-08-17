@@ -21,6 +21,7 @@ const app = express();
 const { topicsRouter } = require("./routers/topics-router");
 const usersRouter = require("./routers/users-router");
 const commentsRouter = require("./routers/comments-router");
+const articlesRouter = require("./routers/articles-router");
 
 app.use(express.json());
 
@@ -28,15 +29,7 @@ app.get("/api", getEndpoints);
 
 app.use("/api/topics", topicsRouter);
 
-app.get("/api/articles", getArticles);
-
-app.get("/api/articles/:article_id", getArticleByID);
-
-app.patch("/api/articles/:article_id", updateArticle);
-
-app.get("/api/articles/:article_id/comments", getCommentsByArticle);
-
-app.post("/api/articles/:article_id/comments", postComment);
+app.use("/api/articles", articlesRouter);
 
 app.use("/api/comments", commentsRouter);
 
