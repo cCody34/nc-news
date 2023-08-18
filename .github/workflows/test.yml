@@ -5,8 +5,12 @@ on:
       - main
 
 jobs:
-  greeting:
+  test-utils:
     runs-on: ubuntu-latest
     steps:
-      - name: say hello
-        run: echo "hello from pipeline"
+      - name: checkout and clone repo
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm i
+      - name: run utils tests
+        run: npm run test-utils
