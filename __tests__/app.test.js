@@ -374,6 +374,57 @@ describe("app", () => {
             expect(body).toHaveProperty("comment_count", 0);
           });
       });
+      test("400: responds with bad request when passed incorrect request body", () => {
+        return request(app)
+        .post("/api/articles")
+        .send({
+          hello: "butter_bridge",
+          goodbye: "Buttered Toast",
+          body: "Put bread in the toaster then butter it.",
+          topic: "cats",
+          article_img_url:
+            "https://spicedblog.com/wp-content/uploads/2019/01/Toast1.jpg",
+        })
+        .expect(400)
+        .then(({ body }) => {
+          const {msg} = body;
+          expect(msg).toBe("bad request")
+        });
+      })
+      test("404: responds with not found when passed author that doesn't exist", () => {
+        return request(app)
+        .post("/api/articles")
+        .send({
+          author: "taylor_swift",
+          title: "Buttered Toast",
+          body: "Put bread in the toaster then butter it.",
+          topic: "cats",
+          article_img_url:
+            "https://spicedblog.com/wp-content/uploads/2019/01/Toast1.jpg",
+        })
+        .expect(404)
+        .then(({ body }) => {
+          const {msg} = body;
+          expect(msg).toBe("not found")
+        });
+      })
+      test("404: responds with not found when passed topic that doesn't exist", () => {
+        return request(app)
+        .post("/api/articles")
+        .send({
+          author: "butter_bridge",
+          title: "Buttered Toast",
+          body: "Put bread in the toaster then butter it.",
+          topic: "cooking",
+          article_img_url:
+            "https://spicedblog.com/wp-content/uploads/2019/01/Toast1.jpg",
+        })
+        .expect(404)
+        .then(({ body }) => {
+          const {msg} = body;
+          expect(msg).toBe("not found")
+        });
+      })
     });
     describe("/api/articles/:article_id", () => {
       describe("GET /api/articles/:article_id", () => {
