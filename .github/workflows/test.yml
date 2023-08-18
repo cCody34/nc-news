@@ -28,6 +28,5 @@ jobs:
           postgresql: test_db
           postgresql user: ms_test_user
           postgresql password: password123
-      - name:
-        run: run app tests
+      - name: run app tests
         run: PGDATABASE=test_db PGUSER=ms_test_user PGPASSWORD=password123 npm run test-app
