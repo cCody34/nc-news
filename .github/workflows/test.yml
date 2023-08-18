@@ -25,7 +25,7 @@ jobs:
       - name: setup psql
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql: test_db
+          postgresql db: test_db
           postgresql user: ms_test_user
           postgresql password: password123
       - name: run app tests
