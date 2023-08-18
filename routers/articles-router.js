@@ -3,6 +3,7 @@ const {
   getArticles,
   getArticleByID,
   updateArticle,
+  postArticle,
 } = require("../db/controllers/articles-controller");
 const {
   getCommentsByArticle,
@@ -10,7 +11,7 @@ const {
 } = require("../db/controllers/comments-controllers");
 const articlesRouter = express.Router();
 
-articlesRouter.route("").get(getArticles);
+articlesRouter.route("").get(getArticles).post(postArticle);
 articlesRouter.route("/:article_id").get(getArticleByID).patch(updateArticle);
 articlesRouter
   .route("/:article_id/comments")

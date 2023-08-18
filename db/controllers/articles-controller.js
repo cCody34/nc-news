@@ -3,6 +3,7 @@ const {
   readArticleByID,
   editArticle,
   checkArticleExists,
+  insertArticle,
 } = require("../models/articles-model");
 const { checkTopicExists } = require("../models/topics-model");
 
@@ -45,4 +46,13 @@ const updateArticle = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getArticles, getArticleByID, updateArticle };
+const postArticle = (req, res, next) => {
+  const { author, title, body, topic, article_img_url } = req.body;
+  insertArticle(title, topic, author, body, article_img_url)
+    .then((article) => {
+      res.status(201).send(article);
+    })
+    .catch(next);
+};
+
+module.exports = { getArticles, getArticleByID, updateArticle, postArticle };

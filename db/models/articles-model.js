@@ -93,3 +93,43 @@ exports.editArticle = (inc_votes, article_id) => {
       return rows[0];
     });
 };
+
+exports.insertArticle = (
+  title,
+  topic,
+  author,
+  body,
+  article_img_url = "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
+) => {
+  return db
+    .query(
+      `INSERT INTO articles
+      (title, topic, author, body, article_img_url)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;`,
+      [title, topic, author, body, article_img_url]
+    )
+    .then(({ rows }) => {
+      const { article_id } = rows[0];
+      return db.query(
+        `SELECT articles.article_id,
+          articles.title,
+          articles.topic,
+          articles.author,
+          articles.article_img_url,
+          articles.created_at,
+          articles.votes,
+          articles.body,
+          COUNT(+comments.article_id) :: INT AS comment_count
+        FROM articles
+        LEFT JOIN comments
+        ON articles.article_id=comments.article_id
+        WHERE articles.article_id = $1
+        GROUP BY articles.article_id;`,
+        [article_id]
+      );
+    })
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
