@@ -14,3 +14,20 @@ jobs:
         run: npm install
       - name: run utils tests
         run: npm run test-utils
+  test-app:
+    needs: test-utils
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout and clone repo
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm install
+      - name: setup psql
+        uses: harmon758/postgresql-action@v1
+          with:
+            postgresql: test_db
+            postgresql user: ms_test_user
+            postgresql password: password123
+      - name:
+        run: run app tests
+        run: PGDATABASE=test_db PGUSER=ms_test_user PGPASSWORD=password123 npm run test-app
