@@ -281,7 +281,7 @@ describe("app", () => {
               });
             });
         });
-      });
+        })
     });
     describe("POST request /api/articles", () => {
       test("201: responds with the newly added article", () => {

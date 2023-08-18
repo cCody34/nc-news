@@ -41,7 +41,7 @@
   },
   "POST /api/articles": {
     "description": "adds the specified article to articles",
-    "queries": [],
+    "queries": ["limit", "p", "total_count"],
     "requestBodyFormat": {
       "author": "butter_bridge",
       "title": "Buttered Toast",

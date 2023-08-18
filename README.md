@@ -72,6 +72,6 @@ npm t app
 
 ## Node and Postgres versions
 
-The minimum required node version to run this project is 6.9.0/
+The minimum required node version to run this project is 6.9.0.
 
 The minimum required postgres version to run this project is 8.0.
